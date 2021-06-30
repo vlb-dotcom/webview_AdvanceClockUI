@@ -6,11 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clock</title>
 
-    <meta name="bs:input:buttonName" content="type=string,description=Display name for the button" />
-        <meta name="bs:output:timeOuput" content="type=string,description=Time output" />
-        <meta name="bs:outlet:Button Clicked" />
+    <meta name="bs:input:openHours" content="type=string, description=store open hours" />
+    <meta name="bs:input:closeHours" content="type=string, description=store close hours" />
+    
+    <meta name="bs:input:buttonName" content="type=string, description=Display name for the button" />
+    <meta name="bs:output:timeOuput" content="type=string, description=Time output" />
+    <meta name="bs:outlet:Button Clicked" />
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/adv_Style.css">
 </head>
 <body onload="setCurrentTime()">
 
@@ -19,7 +22,7 @@
             <p>SET TIME</p>
             <div class="set-time">
                 <div class="hour-mins-ui">
-                    <input type="text" class="time" id="hours" placeholder="00" maxlength="2" onchange="setHourValue(this.value)">
+                    <input type="text" class="time" id="hours" placeholder="00" maxlength="2" onchange="setHourValue(this.value); timeChangeValidation(this.value)" onkeyup="setHourValue(this.value); timeChangeValidation(this.value)" oninput="setHourValue(this.value); timeChangeValidation(this.value)">
                     <span class="semi-colon">:</span>
                     <input type="text" class="time" id="mins" placeholder="00" maxlength="2" onchange="setMinValue(this.value)">
                 </div>
@@ -34,7 +37,7 @@
             <!-- <div class="bottom-nav"> -->
             <!-- <button class="btn-cancel" onclick="sendResponseCancel()">CANCEL</button> -->
             <!-- <button class="btn-ok" id="btn" onclick="pass_SetTime()">DONE</button> -->
-            <button class="btn-select" id="btn" onclick="sendResponse()">SELECT</button>
+            <button class="btn-enabled" id="btn" onclick="sendResponse()">SELECT</button>
         <!-- </div> -->
 
         <!-- Analog Clock Design -->
@@ -59,7 +62,7 @@
     </div>
 
     <script defer src="https://static.botstar.com/webview/sdk/webview-sdk-1.0.0.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/adv_Index.js"></script>
          <!--
       BotStar Webview SDK is required if you want to use BotStarWebview's functions.
       Function onChatBotReady will be called when BotStarWebview is ready to use.

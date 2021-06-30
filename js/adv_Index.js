@@ -40,11 +40,46 @@ let button_PM = document.querySelector(".pm-button")
 addStyleClass_AM = () => {
     button_AM.classList.add("am-button-selected")
     button_PM.classList.remove("pm-button-selected")
+
+    let btn_element = document.getElementById('btn')
+
+    setHour = document.getElementById('hours').value
+
+    if(setHour == 12){
+        setHour = parseInt(setHour) + 12
+    }
+
+    if(parseInt(setHour) >= storeTime_Open && parseInt(setHour) < storeTime_Close){
+        // nothing
+        btn_element.classList.remove("btn-disabled")
+    }else {
+        btn_element.classList.add("btn-disabled")
+    }
+    console.log(setHour)
 }
 
 addStyleClass_PM = () => {
     button_PM.classList.add("pm-button-selected")
     button_AM.classList.remove("am-button-selected")
+
+    let btn_element = document.getElementById('btn')
+
+    setHour = document.getElementById('hours').value
+    
+    if(setHour == 12){
+        setHour = parseInt(setHour) 
+    }else{
+        setHour = parseInt(setHour) + 12
+    }
+
+    if(parseInt(setHour) >= storeTime_Open && parseInt(setHour) < storeTime_Close){
+        // nothing
+         btn_element.classList.remove("btn-disabled")
+         
+    }else {
+        btn_element.classList.add("btn-disabled")
+    }
+    // console.log(setHour + "ampm false")
 }
 
 // Set the current time on page load
@@ -63,6 +98,7 @@ setCurrentTime = () => {
         clickAMElement()
         document.getElementById("hours").value = currentDate.getHours()
     }
+
 }
 
 function clickPMElement(){
@@ -181,36 +217,93 @@ testFunction = () => {
     alert(pass_SetTime())
 }
 
+// Store Time variables
+var storeTime_Open = 0
+var storeTime_Close = 0
 
-// Send Data to Chatbot
-
+// Receive data from chatbot
 function onChatBotReady() {
     // You have to define HTML meta "bs:input:buttonName" in order to inform bot send data to buttonName parameter webview
     // var btnName = BotStarWebview('getParameter', 'buttonName');
 
       // You have to define HTML meta "bs:input:buttonName" in order to inform bot send data to buttonName parameter webview
     var btnName = BotStarWebview('getParameter', 'buttonName');
-    var btn = document.getElementById('btn')
+    // var btn = document.getElementById('btn')
 
-    // if (btnName) {
-    //     btn.appendChild(document.createTextNode(btnName));
-    //     btn.style.display = 'inline-block';
-    // }
+    let hOpen = BotStarWebview('getParameter', 'openHours')
+    let hClose = BotStarWebview('getParameter', 'closeHours')
+
+    hOpen = "8"  //8am in the morning
+    hClose = "19" // 7pm in the evening
+
+    // let storeHours = parseInt(hOpen) + parseInt(hClose)
+
+    var storeHours = hOpen+ "_"+ hClose
+
+    let btn_element = document.getElementById('btn')
+    if(currentDate.getHours() > hOpen && currentDate.getHours() < hClose){
+        // nothing
+        btn_element.classList.remove("btn-disabled")
+    }else {
+        btn_element.classList.toggle("btn-disabled")
+    }
+
+    storeTime_Open = hOpen
+    storeTime_Close = hClose
 
   }
 
-  function sendResponseCancel() {
-    // alert("button is clicked")
+  
+  // Store open or close validation
+  function timeChangeValidation(setHour) {
 
-    var outputs = {
-      timeOuput: "cancel"
-    };
+    let btn_element = document.getElementById('btn')
 
-    BotStarWebview('sendResponse', '', outputs, 'Button Clicked').catch((err) => {
-      console.log(err);
-    });
+    if(am_pm == false && setHour != 12){
+        setHour = parseInt(setHour) + 12
+
+        if(setHour >= storeTime_Open && setHour < storeTime_Close){
+            // nothing
+             btn_element.classList.remove("btn-disabled")
+        }else {
+            btn_element.classList.add("btn-disabled")
+        }
+        // console.log(setHour + " false and not equal to 12")
+    }else if(am_pm == false && setHour == 12){
+        setHour = parseInt(setHour)
+
+        if(setHour >= storeTime_Open && setHour < storeTime_Close){
+            // nothing
+             btn_element.classList.remove("btn-disabled")
+        }else {
+            btn_element.classList.add("btn-disabled")
+        }
+        // console.log(setHour + " PM and equal to 12")
+    }else if(am_pm == true && setHour == 12){
+        setHour = parseInt(setHour) + 12
+
+        if(setHour >= storeTime_Open && setHour < storeTime_Close){
+            // nothing
+             btn_element.classList.remove("btn-disabled")
+        }else {
+            btn_element.classList.add("btn-disabled")
+        }
+        // console.log(setHour + " AM and equal to 12")
+    }else {
+        if(parseInt(setHour) >= storeTime_Open && parseInt(setHour) < storeTime_Close){
+            // nothing
+            btn_element.classList.remove("btn-disabled")
+        }else {
+            btn_element.classList.add("btn-disabled")
+        }
+        // console.log(setHour)
+    }
+
+    // console.log(am_pm)
   }
 
+
+  // Send Data to Chatbot
 function sendResponse() {
     // alert("button is clicked")
     pass_SetTime()
@@ -223,4 +316,5 @@ function sendResponse() {
     BotStarWebview('sendResponse', '', outputs, 'Button Clicked').catch((err) => {
       console.log(err);
     });
+
   }
